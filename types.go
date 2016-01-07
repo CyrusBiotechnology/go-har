@@ -8,56 +8,55 @@ This file was hand-built from the W3C RFC located at:
 
 */
 
-
 type HAR struct {
 	/* This object represents the root of the exported data. This object MUST be
 	present and its name MUST be "log". The object contains the following
 	name/value pairs:
-	 */
+	*/
 
 	// Required. Version number of the format.
-	Version			string
+	Version string
 	// Required. An object of type creator that contains the name and version
 	// information of the log creator application.
-	Creator 		Creator
+	Creator Creator
 	// Optional. An object of type browser that contains the name and version
 	// information of the user agent.
-	Browser			Browser
+	Browser Browser
 	// Optional. An array of objects of type page, each representing one exported
 	// (tracked) page. Leave out this field if the application does not support
 	// grouping by pages.
-	Pages				[]Page	`json:"omitempty"`
+	Pages []Page `json:"omitempty"`
 	// Required. An array of objects of type entry, each representing one
 	// exported (tracked) HTTP request.
-	Entries			[]Entry
+	Entries []Entry
 	// Optional. A comment provided by the user or the application. Sorting
 	// entries by startedDateTime (starting from the oldest) is preferred way how
 	// to export data since it can make importing faster. However the reader
 	// application should always make sure the array is sorted (if required for
 	// the import).
-	Comment 		string
+	Comment string
 }
 
 type Creator struct {
 	/* This object contains information about the log creator application and
 	contains the following name/value pairs:
-	 */
+	*/
 
 	// Required. The name of the application that created the log.
-	Name		string
+	Name string
 	// Required. The version number of the application that created the log.
-	Version	string
+	Version string
 	// Optional. A comment provided by the user or the application.
-	Comment	string	`json:"omitempty"`
+	Comment string `json:"omitempty"`
 }
 
 type Browser struct {
 	/* This object contains information about the browser that created the log
 	and contains the following name/value pairs:
-	 */
+	*/
 
 	// Required. The name of the browser that created the log.
-	Name		string
+	Name string
 	// Required. The version number of the browser that created the log.
 	Version string
 	// Optional. A comment provided by the user or the browser.
@@ -69,26 +68,26 @@ type Page struct {
 	object for every HTTP request. In case when an HTTP trace tool isn't able to
 	group requests by a page, the <pages> object is empty and individual
 	requests doesn't have a parent page.
-	 */
+	*/
 
 	// Date and time stamp for the beginning of the page load
 	// (ISO 8601 YYYY-MM-DDThh:mm:ss.sTZD, e.g. 2009-07-24T19:20:30.45+01:00).
-	StartedDateTime	string
+	StartedDateTime string
 	// Unique identifier of a page within the . Entries use it to refer the parent page.
-	Id							string
+	Id string
 	// Page title.
-	Title						string
+	Title string
 	// Detailed timing info about page load.
-	PageTiming 			PageTiming
+	PageTiming PageTiming
 	// (new in 1.2) A comment provided by the user or the application.
-	Comment 				string	`json:"omitempty"`
+	Comment string `json:"omitempty"`
 }
 
 type PageTiming struct {
 	/* This object describes timings for various events (states) fired during the
 	page load. All times are specified in milliseconds. If a time info is not
 	available appropriate field is set to -1.
-	 */
+	*/
 
 	// Content of the page loaded. Number of milliseconds since page load started
 	// (page.startedDateTime). Use -1 if the timing does not apply to the current
@@ -99,41 +98,41 @@ type PageTiming struct {
 	// Page is loaded (onLoad event fired). Number of milliseconds since page
 	// load started (page.startedDateTime). Use -1 if the timing does not apply
 	// to the current request.
-	OnLoad 				int
+	OnLoad int
 	// (new in 1.2) A comment provided by the user or the application.
-	Comment 			string
+	Comment string
 }
 
 type Entry struct {
 	// Unique, optional Reference to the parent page. Leave out this field if
 	// the application does not support grouping by pages.
-	Pageref					string	`json:"omitempty"`
+	Pageref string `json:"omitempty"`
 	// Date and time stamp of the request start
 	// (ISO 8601 YYYY-MM-DDThh:mm:ss.sTZD).
 	StartedDateTime string
 	// Total elapsed time of the request in milliseconds. This is the sum of all
 	// timings available in the timings object (i.e. not including -1 values) .
-	Time 						float32
+	Time float32
 	// Detailed info about the request.
-	Request 				Request
+	Request Request
 	// Detailed info about the response.
-	Response 				Response
+	Response Response
 	// Info about cache usage.
-	Cache						Cache
+	Cache Cache
 	// Detailed timing info about request/response round trip.
-	Timings					Timings
+	Timings Timings
 	// optional (new in 1.2) IP address of the server that was connected
 	// (result of DNS resolution).
-	ServerIPAddress string	`json:"omitempty"`
+	ServerIPAddress string `json:"omitempty"`
 	// optional (new in 1.2) Unique ID of the parent TCP/IP connection, can be
 	// the client port number. Note that a port number doesn't have to be unique
 	// identifier in cases where the port is shared for more connections. If the
 	// port isn't available for the application, any other unique connection ID
 	// can be used instead (e.g. connection index). Leave out this field if the
 	// application doesn't support this info.
-	Connection 			string	`json:"omitempty"`
+	Connection string `json:"omitempty"`
 	// (new in 1.2) A comment provided by the user or the application.
-	Comment 				string	`json:"omitempty"`
+	Comment string `json:"omitempty"`
 }
 
 type Request struct {
@@ -141,28 +140,28 @@ type Request struct {
 	 */
 
 	// Request method (GET, POST, ...).
-	Method			string
+	Method string
 	// Absolute URL of the request (fragments are not included).
-	Url 				string
+	Url string
 	// Request HTTP Version.
-	HttpVersion	string
+	HttpVersion string
 	// List of cookie objects.
-	Cookies			[]Cookie
+	Cookies []Cookie
 	// List of header objects.
-	Headers			[]NVP
+	Headers []NVP
 	// List of query parameter objects.
-	QueryString	[]NVP
+	QueryString []NVP
 	// Posted data.
-	PostData		PostData
+	PostData PostData
 	// Total number of bytes from the start of the HTTP request message until
 	// (and including) the double CRLF before the body. Set to -1 if the info
 	// is not available.
-	HeaderSize	int
+	HeaderSize int
 	// Size of the request body (POST data payload) in bytes. Set to -1 if the
 	// info is not available.
-	BodySize 		int
+	BodySize int
 	// (new in 1.2) A comment provided by the user or the application.
-	Comment			string
+	Comment string
 }
 
 type Response struct {
@@ -170,17 +169,17 @@ type Response struct {
 	 */
 
 	// Response status.
-	Status 			string
+	Status string
 	// Response status description.
-	StatusText	string
+	StatusText string
 	// Response HTTP Version.
-	HttpVersion	string
+	HttpVersion string
 	// List of cookie objects.
-	Cookies			[]Cookie
+	Cookies []Cookie
 	// List of header objects.
-	Headers			[]NVP
+	Headers []NVP
 	// Details about the response body.
-	Content			Content
+	Content Content
 	// Redirection target URL from the Location response header.
 	RedirectURL string
 	// Total number of bytes from the start of the HTTP response message until
@@ -194,9 +193,9 @@ type Response struct {
 	// Size of the received response body in bytes. Set to zero in case of
 	// responses coming from the cache (304). Set to -1 if the info is not
 	// available.
-	BodySize 		int
+	BodySize int
 	// optional (new in 1.2) A comment provided by the user or the application.
-	Comment 		string `json:"omitempty"`
+	Comment string `json:"omitempty"`
 }
 
 type Cookie struct {
@@ -205,35 +204,35 @@ type Cookie struct {
 	*/
 
 	// The name of the cookie.
-	Name			string
+	Name string
 	// The cookie value.
-	Value			string
+	Value string
 	// optional The path pertaining to the cookie.
-	Path			string	`json:"omitempty"`
+	Path string `json:"omitempty"`
 	// optional The host of the cookie.
-	Domain		string	`json:"omitempty"`
+	Domain string `json:"omitempty"`
 	// optional Cookie expiration time.
 	// (ISO 8601 YYYY-MM-DDThh:mm:ss.sTZD, e.g. 2009-07-24T19:20:30.123+02:00).
-	Expires		string	`json:"omitempty"`
+	Expires string `json:"omitempty"`
 	// optional Set to true if the cookie is HTTP only, false otherwise.
-	HttpOnly	string	`json:"omitempty"`
+	HttpOnly string `json:"omitempty"`
 	// optional (new in 1.2) True if the cookie was transmitted over ssl, false
 	// otherwise.
-	Secure		bool		`json:"omitempty"`
+	Secure bool `json:"omitempty"`
 	// optional (new in 1.2) A comment provided by the user or the application.
-	Comment		bool		`json:"omitempty"`
+	Comment bool `json:"omitempty"`
 }
 
 type NVP struct {
-	Name		string
-	Value		string
-	Comment	string	`json:"omitempty"`
+	Name    string
+	Value   string
+	Comment string `json:"omitempty"`
 }
 
 type PostData struct {
 	/* This object describes posted data, if any (embedded in <request> object).
 	 */
-	
+
 	//  Mime type of posted data.
 	MimeType string
 	//  List of posted parameters (in case of URL encoded parameters).
@@ -252,19 +251,19 @@ type PostParam struct {
 	// name of a posted parameter.
 	Name string
 	// optional value of a posted parameter or content of a posted file.
-	Value string	`json:"omitempty"`
+	Value string `json:"omitempty"`
 	// optional name of a posted file.
-	FileName string	`json:"omitempty"`
+	FileName string `json:"omitempty"`
 	// optional content type of a posted file.
-	ContentType string	`json:"omitempty"`
+	ContentType string `json:"omitempty"`
 	// optional (new in 1.2) A comment provided by the user or the application.
-	Comment string	`json:"omitempty"`
+	Comment string `json:"omitempty"`
 }
 
 type Content struct {
 	/* This object describes details about response content (embedded in
 	<response> object).
-	 */
+	*/
 
 	// Length of the returned content in bytes. Should be equal to
 	// response.bodySize if there is no compression and bigger when the content
@@ -295,7 +294,7 @@ type Content struct {
 type Cache struct {
 	/* This objects contains info about a request coming from browser cache.
 	 */
-	
+
 	// optional State of a cache entry before the request. Leave out this field
 	// if the information is not available.
 	BeforeRequest CacheObject `json:"omitempty"`
@@ -325,7 +324,7 @@ type CacheObject struct {
 type Timings struct {
 	/* This object describes various phases within request-response round trip.
 	All times are specified in milliseconds.
-	 */
+	*/
 
 	Blocked int `json:"omitempty"`
 	// optional - Time spent in a queue waiting for a network connection. Use -1
