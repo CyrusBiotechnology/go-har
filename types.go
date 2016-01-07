@@ -120,7 +120,7 @@ type Entry struct {
 	// Info about cache usage.
 	Cache Cache
 	// Detailed timing info about request/response round trip.
-	Timings Timings
+	PageTimings PageTimings
 	// optional (new in 1.2) IP address of the server that was connected
 	// (result of DNS resolution).
 	ServerIPAddress string `json:"omitempty"`
@@ -224,6 +224,7 @@ type Cookie struct {
 }
 
 type NVP struct {
+	// NVP is simply a name/value pair with a comment
 	Name    string
 	Value   string
 	Comment string `json:"omitempty"`
@@ -321,7 +322,7 @@ type CacheObject struct {
 	Comment string `json:"omitempty"`
 }
 
-type Timings struct {
+type PageTimings struct {
 	/* This object describes various phases within request-response round trip.
 	All times are specified in milliseconds.
 	*/
